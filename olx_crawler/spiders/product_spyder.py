@@ -4,9 +4,12 @@ import re
 class ProductSpyder(scrapy.Spider):
     name = "product"
 
-    start_urls = [
-        'http://sp.olx.com.br/sao-paulo-e-regiao/videogames?q=ps4',
-    ]
+    start_urls = []
+
+    allowed_domains = ['olx.com.br']
+
+    def __init__(self, url=None):
+        self.start_urls.append(url)
 
     def parse(self, response):
         self.log("Busca: %s" % response.css('title::text').extract_first())
@@ -49,4 +52,4 @@ class ProductSpyder(scrapy.Spider):
         yield product
 
     def removeNewLinesAndTabs(self, string):
-        return string.replace('\n', '').replace('\t', '')
+        return string.strip(' ').replace('\n', '').replace('\t', '')
